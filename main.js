@@ -55,4 +55,5 @@ async function main() {
     }
 }
 
-new CronJob({cronTime: '* */60 * * * *', onTick: main, runOnInit: true}).start();
+const cronTime = process.env.CRON_TIME || '* */60 * * * *';
+new CronJob({cronTime, onTick: main, runOnInit: true}).start();
