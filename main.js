@@ -7,6 +7,7 @@ if (process.env.DEV === 'true') {
 }
 const s3 = new aws.S3(config);
 
+const CronJob = require('cron').CronJob;
 const mysql = require('mysql2/promise');
 
 let db;
@@ -47,11 +48,11 @@ async function main() {
         console.log(`Got ${rows.length} results`);
         if (rows.length === 0) {
             console.log('Done');
-            process.exit(0);
+            break;
         }
         console.log('Deleting...');
         await Promise.all(rows.map(r => deleteReplay(r)));
     }
 }
 
-main();
+new CronJob({cronTime: '* */60 * * * *', onTick: main, runOnInit: true}).start();

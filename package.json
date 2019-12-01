@@ -2,6 +2,7 @@
   "private": true,
   "dependencies": {
     "aws-sdk": "^2.368.0",
+    "cron": "^1.7.2",
     "mysql2": "^1.6.4"
   }
 }
