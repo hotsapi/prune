@@ -31,10 +31,12 @@ async function main() {
         console.time('Query time');
         const [rows, _] = await db.query(`
             select id, filename from replays where processed = 1 and deleted = 0 and not (
-                   game_type = 'HeroLeague' and game_date > now() - interval 90 day
-                or game_type = 'TeamLeague' and game_date > now() - interval 90 day
-                or game_date > now() - interval 30 day
-                or created_at > now() - interval 7 day) 
+                       game_type = 'HeroLeague' and game_date > now() - interval 90 day
+                    or game_type = 'TeamLeague' and game_date > now() - interval 90 day
+                    or game_type = 'StormLeague' and game_date > now() - interval 90 day
+                    or game_date > now() - interval 30 day
+                    or created_at > now() - interval 7 day) 
+                or processed = -1 and deleted = 0 and created_at > now() - interval 30 day    
             limit 30000`);
         console.timeEnd('Query time');
         console.log(`Got ${rows.length} results`);
