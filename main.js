@@ -1,5 +1,12 @@
 const aws = require('aws-sdk');
-const s3 = new aws.S3();
+
+const config = {};
+if (process.env.DEV === 'true') {
+  const endpoint = process.env.AWS_ENDPOINT ? process.env.AWS_ENDPOINT : undefined;
+  Object.assign(config, {endpoint, s3ForcePathStyle: true, logger: console});
+}
+const s3 = new aws.S3(config);
+
 const mysql = require('mysql2/promise');
 
 let db;
