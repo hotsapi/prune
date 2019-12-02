@@ -2,7 +2,7 @@ const aws = require('aws-sdk');
 
 const config = {};
 if (process.env.DEV === 'true') {
-  const endpoint = process.env.AWS_ENDPOINT ? process.env.AWS_ENDPOINT : undefined;
+  const endpoint = process.env.AWS_ENDPOINT;
   Object.assign(config, {endpoint, s3ForcePathStyle: true, logger: console});
 }
 const s3 = new aws.S3(config);
