@@ -48,7 +48,7 @@ async function main() {
             limit 30000`);
         console.timeEnd('Query time');
         console.log(`Got ${rows.length} results`);
-        if (rows.length === 0) {
+        if (rows.length < 100) {
             console.log('Done');
             break;
         }
