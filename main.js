@@ -1,5 +1,13 @@
 const aws = require('aws-sdk');
-const s3 = new aws.S3();
+
+const config = {};
+if (process.env.DEV === 'true') {
+  const endpoint = process.env.AWS_ENDPOINT;
+  Object.assign(config, {endpoint, s3ForcePathStyle: true, logger: console});
+}
+const s3 = new aws.S3(config);
+
+const CronJob = require('cron').CronJob;
 const mysql = require('mysql2/promise');
 
 let db;
@@ -42,11 +50,12 @@ async function main() {
         console.log(`Got ${rows.length} results`);
         if (rows.length === 0) {
             console.log('Done');
-            process.exit(0);
+            break;
         }
         console.log('Deleting...');
         await Promise.all(rows.map(r => deleteReplay(r)));
     }
 }
 
-main();
+const cronTime = process.env.CRON_TIME || '* */60 * * * *';
+new CronJob({cronTime, onTick: main, runOnInit: true}).start();
